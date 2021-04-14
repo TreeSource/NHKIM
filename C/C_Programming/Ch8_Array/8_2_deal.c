@@ -18,7 +18,7 @@ int main (void)
     srand((unsigned) time(NULL));
 
     printf("Enter a number of cards in hand: ");
-    scaanf("%d", &num_cards);
+    scanf("%d", &num_cards);
 
     printf("Yout hand:");
     while(num_cards > 0)
