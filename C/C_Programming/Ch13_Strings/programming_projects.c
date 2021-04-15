@@ -296,7 +296,6 @@ void reverse_name(char *name)
     for (ch_p = name; *ch_p == ' '; ++ch_p);
     for (; *ch_p != ' '; ++ch_p);
     for (; *ch_p == ' '; ++ch_p);
-    printf("%ld\n", ch_p - name);
     for (ch_p2 = rname; *ch_p != 0; *ch_p2++ = *ch_p++);
     *ch_p2++ = ','; *ch_p2++ = ' '; 
     for (ch_p = name; *ch_p == ' '; ++ch_p);
