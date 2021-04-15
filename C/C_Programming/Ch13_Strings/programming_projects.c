@@ -39,10 +39,19 @@ void Question5(int argc, char *argv[]);
 void Question6(int argc, char *argv[]);
 //Q7
 void Question7(void);
+//Q8 Ch7-PP5
+void Question8(void);
+int compute_scrabble_value(const char *word);
+//Q9 Ch7-PP10
+void Question9(void);
+int compute_vowel_count (const char *sentence);
+//Q10 Ch7-PP11
+void Question10(void);
+void reverse_name(char *name);
 
 int main(int argc, char *argv[])
 {
-    int argi = *argv[1] - 48;
+    int argi = atoi(argv[1]);
     switch (argi)
     {
     case 1:
@@ -74,6 +83,18 @@ int main(int argc, char *argv[])
     case 7:
         printf("Q7\n");
         Question7();
+
+    case 8:
+        printf("Q8\n");
+        Question8();
+
+    case 9:
+        printf("Q9\n");
+        Question9();
+
+    case 10:
+        printf("Q10\n");
+        Question10();
 
     default:
         break;
@@ -213,5 +234,75 @@ void Question7(void)
     else if (tenth > 1) {printf("%s%s", atenth[tenth], afirst[first]);}
     else {printf("Wrong number");}
     printf("\n");
+}
+
+void Question8(void)
+{
+    char scrabble[] = "AEILNORSTUDGBCMPFHVWYKJXQZ";
+    printf("Scrabble value: %d\n", compute_scrabble_value(scrabble));
+}
+
+int compute_scrabble_value(const char *word)
+{
+    char cin; int res = 0;
+    const char *ch_p;
+    printf("Enter a word: ");
+    while ((cin = getchar()) != '\n')
+    {
+        for (ch_p = word; *ch_p != 0; ++ch_p) if (*ch_p == toupper(cin)) break;
+        if ((ch_p - word) < 10) res += 1;
+        else if ((ch_p - word) < 12) res += 2;
+        else if ((ch_p - word) < 16) res += 3;
+        else if ((ch_p - word) < 21) res += 4;
+        else if ((ch_p - word) < 22) res += 5;
+        else if ((ch_p - word) < 24) res += 8;
+        else res += 10;
+    }
+    return res;
+}
+
+void Question9(void)
+{
+    char sin[MAX_CHAR1+1];
+    printf("Enter a sentence: ");
+    read_line2(sin, MAX_CHAR1);
+    printf("Your sentence contains %d vowels\n", compute_vowel_count(sin));
+}
+
+int compute_vowel_count(const char *sentense)
+{
+    const char *ch_p = sentense;
+    char vowels[] = "aeiou", *ch_p2; int nvowels = 0;
+    while (*ch_p++)
+    {
+        for (ch_p2 = vowels; *ch_p2 != 0; ++ch_p2) if (*ch_p == *ch_p2) {nvowels++; break;}
+    }
+    return nvowels;
+}
+
+void Question10(void)
+{
+    char sin[MAX_CHAR1 + 1];
+    printf("Enter a first and last name: ");
+    read_line2(sin, MAX_CHAR1);
+    printf("%s\n", sin);
+    reverse_name(sin);
+    printf("%s\n", sin);
+}
+
+void reverse_name(char *name)
+{
+    char rname[MAX_CHAR1 + 1], *ch_p, *ch_p2;
+    for (ch_p = name; *ch_p == ' '; ++ch_p);
+    for (; *ch_p != ' '; ++ch_p);
+    for (; *ch_p == ' '; ++ch_p);
+    printf("%ld\n", ch_p - name);
+    for (ch_p2 = rname; *ch_p != 0; *ch_p2++ = *ch_p++);
+    *ch_p2++ = ','; *ch_p2++ = ' '; 
+    for (ch_p = name; *ch_p == ' '; ++ch_p);
+    *ch_p2++ = *ch_p;
+    *ch_p2++ = '.'; *ch_p2 = 0;
+
+    strcpy(name, rname);
 }
 
