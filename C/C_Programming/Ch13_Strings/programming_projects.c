@@ -5,6 +5,7 @@
 #include <stdbool.h>
 #include <time.h>
 #include <stdlib.h>
+#include <ctype.h>
 
 //Definitions
 //Q1
@@ -19,6 +20,8 @@
 #define SPADE 3
 #define NUM_RANKS 13
 #define NUM_SUITS 4
+//Q7
+#define NUM_PLANETS 9
 
 //Prototypes
 //Q1
@@ -28,6 +31,14 @@ void Question2(void);
 int read_line2 (char str[], int n);
 //Q3
 void Question3(void);
+//Q4
+void Question4(int argc, char *argv[]);
+//Q5
+void Question5(int argc, char *argv[]);
+//Q6
+void Question6(int argc, char *argv[]);
+//Q7
+void Question7(void);
 
 int main(int argc, char *argv[])
 {
@@ -36,7 +47,6 @@ int main(int argc, char *argv[])
     {
     case 1:
         printf("Q1\n");
-        
         Question1();
 
         break;
@@ -48,6 +58,22 @@ int main(int argc, char *argv[])
     case 3:
         printf("Q3\n");
         Question3();
+    
+    case 4:
+        printf("Q4\n");
+        Question4(argc, argv);
+
+    case 5:
+        printf("Q5\n");
+        Question5(argc, argv);
+
+    case 6:        
+        printf("Q6\n");
+        Question6(argc, argv);
+
+    case 7:
+        printf("Q7\n");
+        Question7();
 
     default:
         break;
@@ -144,6 +170,48 @@ void Question3(void)
         }
     }
     printf("\n");
+}
 
+void Question4(int argc, char *argv[])
+{
+    for (int i = argc - 1; i >= 2; --i) printf("%s ", argv[i]);
+    printf("\n");
+}
+
+void Question5(int argc, char *argv[])
+{
+    int sum = 0;
+    for (int i = 2; i < argc; ++i) sum += atoi(argv[i]);
+    printf("Total: %d\n", sum);
+}
+
+void Question6(int argc, char *argv[])
+{
+    char *planets[] = {"MERCURY", "VENUS", "EARTH", "MARS", "JUPITER", "SATURN", "URANUS", "NAPTUNE", "PLUTO"}, ch[MAX_CHAR1], *ch_p, *ch_p2;
+    int i, j;
+    for (i = 2; i < argc; ++i) 
+    {
+        for (ch_p = argv[i], ch_p2 = ch; *ch_p != 0; *ch_p2++ = toupper(*ch_p), ++ch_p);
+        for (j = 0; j < NUM_PLANETS; ++j)
+        {
+            if (strcmp(ch, planets[j]) == 0) {printf("%s is planet %d\n", argv[i], j + 1); break;}
+        }
+        if (j == NUM_PLANETS) printf("%s is not a planet\n", argv[i]);
+    }
+}
+
+void Question7(void)
+{
+    char *atenth[] = {"", "", "Twenty", "Thirty", "Fourty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"};
+    char *afirst[] = {"", "-One", "-Two", "-Three", "-Four", "-Five", "-Six", "-Seven", "-Eight", "-Nine"};
+    char *ateenth[] = {"Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"};
+    int tenth, first = 0;
+    printf("Enter a two digit number: ");
+    scanf("%1d%1d", &tenth, &first);
+    printf("You Entered the Number ");
+    if (tenth == 1) {printf("%s", ateenth[first]);}
+    else if (tenth > 1) {printf("%s%s", atenth[tenth], afirst[first]);}
+    else {printf("Wrong number");}
+    printf("\n");
 }
 
