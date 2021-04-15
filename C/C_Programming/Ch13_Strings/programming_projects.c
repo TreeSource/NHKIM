@@ -8,6 +8,7 @@
 #include <ctype.h>
 
 //Definitions
+#define MAX_CHAR 255
 //Q1
 #define MAX_CHAR1 20
 //Q2
@@ -22,6 +23,9 @@
 #define NUM_SUITS 4
 //Q7
 #define NUM_PLANETS 9
+//Q12
+#define MAX_WORDS 30
+#define MAX_WORDS_LENGTH 20
 
 //Prototypes
 //Q1
@@ -48,6 +52,20 @@ int compute_vowel_count (const char *sentence);
 //Q10 Ch7-PP11
 void Question10(void);
 void reverse_name(char *name);
+//Q11 Ch7-PP13
+void Question11(void);
+double compute_average_word_length(const char *sentense);
+//Q12 Ch8-PP14
+void Question12(void);
+//Q13 Ch8--PP15
+void Question13(void);
+void encrypt(char *message, int shift);
+//Q14 Ch8--PP16
+void Question14(void);
+bool are_anagrams(const char *word1, const char *word2);
+//Q15 Ch10--PP6
+void Question15(void);
+int evaluate_RPN_expression(const char *expression);
 
 int main(int argc, char *argv[])
 {
@@ -95,6 +113,26 @@ int main(int argc, char *argv[])
     case 10:
         printf("Q10\n");
         Question10();
+
+    case 11:
+        printf("Q11\n");
+        Question11();
+
+    case 12:
+        printf("Q12\n");
+        Question12();
+
+    case 13:
+        printf("Q13\n");
+        Question13();
+
+    case 14:
+        printf("Q14\n");
+        Question14();
+
+    case 15:
+        printf("Q15\n");
+        Question15();
 
     default:
         break;
@@ -303,5 +341,126 @@ void reverse_name(char *name)
     *ch_p2++ = '.'; *ch_p2 = 0;
 
     strcpy(name, rname);
+}
+
+
+void Question11(void)
+{
+    char sentense[MAX_CHAR + 1];
+    printf("Enter a sentense: ");
+    read_line2(sentense, MAX_CHAR);
+    printf("Average word length: %.2f\n", compute_average_word_length(sentense));
+}
+
+double compute_average_word_length(const char *sentense)
+{
+    const char *ch_p = sentense; double word_count = 0.0; double word_length = 0.0;
+    for(; *ch_p != 0; ch_p++)
+    {
+        if (*ch_p == ' ' && *(ch_p - 1) != ' ') ++word_count;
+        else ++word_length;
+    }
+    return word_length / word_count;
+}
+
+void Question12(void)
+{   
+    char sins[MAX_WORDS][MAX_WORDS_LENGTH + 1], end, cin, *ch_p = sins[0]; int cur = 0;
+    printf("Enter a sentense: ");
+    while((cin = getchar()) != '\n')
+    {
+        if (cin == ' ') {*ch_p = 0; ch_p = sins[++cur];}
+        else *ch_p++ = cin;
+    }
+    *ch_p-- = 0;
+    if (*ch_p == '!' || *ch_p == '?' || *ch_p == '.') {end = *ch_p; *ch_p = 0;}
+    for(printf("%s", sins[cur--]); cur >= 0; printf(" %s", sins[cur--]));
+    printf("%c\n", end);
+}
+
+void Question13(void)
+{
+    char sin[MAX_CHAR + 1]; int shift;
+    printf("Enter message to be encrypted: ");
+    read_line2(sin, MAX_CHAR);
+    printf("Enter shift amount (1-25): ");
+    scanf("%d", &shift);
+    encrypt(sin, shift);
+}
+
+void encrypt(char *message, int shift)
+{
+    printf("Encrypted message: ");
+    for (; *message != 0; ++message)
+    {
+        if ((*message >= 'A' && *message <= 'Z')||(*message >= 'a' && *message <= 'z'))
+        {
+            if (*message < 'a')
+            {
+                printf("%c", (((*message - 'A') + shift) % 26 + 'A'));
+            }
+            else {
+                printf("%c", (((*message - 'a') + shift) % 26 + 'a'));
+            }
+        } else {
+            printf("%c", *message);
+        }
+    }
+    printf("\n");
+}
+
+void Question14(void)
+{
+    char sin1[MAX_CHAR], sin2[MAX_CHAR], ch, *ch_p;
+    printf("Enter first word: "); ch_p = sin1;
+    while ((ch = getchar()) != '\n') *ch_p++ = ch;
+    *ch_p = 0; printf("Enter second word: "); ch_p = sin2;
+    while ((ch = getchar()) != '\n') *ch_p++ = ch;
+    *ch_p = 0;
+    if (are_anagrams(sin1, sin2)) printf("The words are anagrams.\n");
+    else printf("The words are not anagrams.\n");
+}
+
+bool are_anagrams(const char *word1, const char *word2)
+{
+    int is_in[26] = {0};
+    for (; *word1 != 0; ++is_in[toupper(*word1++) - 'A']);
+    for (; *word2 != 0; --is_in[toupper(*word2++) - 'A']);
+    for (int i = 0; i < 26; ++i) if (is_in[i] != 0) return false;
+    return true;
+}
+
+void Question15(void)
+{
+    char expression[MAX_CHAR + 1];
+    printf("Enter an expression: ");
+    read_line2(expression, MAX_CHAR);
+    printf("%s\n", expression);
+    printf("The answer: %d\n", evaluate_RPN_expression(expression));
+}
+
+int evaluate_RPN_expression(const char *expression)
+{
+    int nums[256], *top = &nums[0], operands = 0; const char *ch_p = expression;
+    while (*ch_p++)
+    {
+        if (*ch_p <= '9' && *ch_p >= '0')
+        {
+            *top++ = *ch_p - '0';
+        }
+        else if (*ch_p == '+' || *ch_p == '-' || *ch_p == '*' || *ch_p == '/')
+        {
+            if (top == nums) {printf("Too complex\n"); exit(1);}
+            else 
+            {
+                operands = *top; top--;
+                if (*ch_p == '+') *top = *top + operands;
+                else if (*ch_p == '-') *top = *top - operands;
+                else if (*ch_p == '*') *top = *top * operands;
+                else if (*ch_p == '/') *top = *top / operands;
+            }
+        }
+    }
+    return *top;
 }
 
