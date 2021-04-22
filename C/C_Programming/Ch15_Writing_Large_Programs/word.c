@@ -10,10 +10,12 @@ int read_char(void)
 int read_word(char *word, int len)
 {
     int ch, pos = 0;
-    while ((ch = read_char()) == ' ');
+    while ((ch = read_char()) == ' ')
+        ;
     while (ch != ' ' && ch != EOF)
     {
-        if (pos < len) word[pos++] = ch;
+        if (pos < len - 1) {word[pos++] = ch;}
+        else if (pos == len) {word[pos++] = '*';}
         ch = read_char();
     }
     word[pos] = '\0';
