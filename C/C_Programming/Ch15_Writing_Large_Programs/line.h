@@ -21,6 +21,7 @@ int space_remaining(void);
 /*
 write_line: Writes the current line with justification.
 */
+void write_line(void);
 
 /*
 flush_line: Writes the current line without justification. If
