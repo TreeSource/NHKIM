@@ -1,7 +1,7 @@
 /* Maintains a part database (array version) */
 
 #include <stdio.h>
-#include "read_line.h"
+#include "readline.h"
 
 #define NAME_LEN 25
 #define MAX_PARTS 100
@@ -82,7 +82,7 @@ void insert (void)
     scanf("%d", &part_number);
     if (find_part(part_number) >= 0) 
     {
-        printF("Part already exists.\n");
+        printf("Part already exists.\n");
         return;
     }
 
