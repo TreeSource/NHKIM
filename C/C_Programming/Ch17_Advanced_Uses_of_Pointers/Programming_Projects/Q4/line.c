@@ -1,6 +1,7 @@
 /* Programming projects Ch17_Q4 */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include "line.h"
 
@@ -8,31 +9,36 @@
 
 struct node
 {
-    char word[];
+    int len;
     struct node *next;
+    char word[];
 };
 
-char line[MAX_LINE_LEN + 1];
+struct node *line = NULL;
 int line_len = 0;
 int num_words = 0;
 
 void clear_line(void)
 {
-    line[0] = '\0';
+    line = NULL;
     line_len = 0;
     num_words = 0;
 }
 
 void add_word(const char *word)
 {
-    if (num_words > 0)
+    int n = strlen(word);
+    struct node *new_node = malloc(sizeof(struct node) + n), *p = line;
+    new_node->len = n;
+    strcpy(new_node->word, word);
+    new_node->next = NULL;
+    if (p == NULL) p = new_node;
+    else 
     {
-        line[line_len] = ' ';
-        line[line_len + 1] = '\0';
-        line_len++;
+        for(int i = 0; i < num_words; ++i, p = p->next);
+        p->next = new_node;
     }
-    strcat(line, word);
-    line_len += strlen(word);
+    line_len += n;
     num_words++;
 }
 
@@ -44,23 +50,28 @@ int space_remaining(void)
 void write_line(void)
 {
     int extra_spaces, spaces_to_insert, i, j;
+    struct node *p = line;
 
     extra_spaces = MAX_LINE_LEN - line_len;
-    for (i = 0; i < line_len; ++i)
-    {
-        if (line[i] != ' ') putchar(line[i]);
-        else
-        {
-            spaces_to_insert = extra_spaces / (num_words - 1);
-            for (j = 0; j < spaces_to_insert; ++j) putchar(' ');
-            extra_spaces -= spaces_to_insert;
-            num_words--;
-        }
+    for (; p != NULL; p = p->next)
+    {   
+        for(int i = 0; i < p->len; ++i) putchar(p->word[i]);
+        spaces_to_insert = extra_spaces / (num_words - 1);
+        for (j = 0; j < spaces_to_insert; ++j) putchar(' ');
+        extra_spaces -= spaces_to_insert;
+        num_words--;
     }
     putchar('\n');
 }
 
 void flush_line(void)
 {
-    if (line_len > 0) puts(line);
+    if (line_len > 0)
+    {
+        struct node *p = line;
+        for (; p != NULL; p = p->next)
+        {
+            for(int i = 0; i < p->len; ++i) putchar(p->word[i]);
+        }
+    }
 }

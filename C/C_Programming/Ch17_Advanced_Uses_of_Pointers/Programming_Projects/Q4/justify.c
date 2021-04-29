@@ -1,6 +1,7 @@
 /* Formats a file of text */
 
 #include <string.h>
+#include <stdio.h>
 #include "line.h"
 #include "word.h"
 
@@ -15,6 +16,7 @@ int main (void)
     for(;;)
     {
         word_len = read_word(word, MAX_WORD_LEN+1);
+        printf("%d", word_len);
         if (word_len == 0)
         {
             flush_line();

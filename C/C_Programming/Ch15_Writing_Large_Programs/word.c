@@ -12,7 +12,7 @@ int read_word(char *word, int len)
     int ch, pos = 0;
     while ((ch = read_char()) == ' ')
         ;
-    while (ch != ' ' && ch != EOF)
+    while (ch != ' ' && ch != EOF && ch != '\n')
     {
         if (pos < len - 1) {word[pos++] = ch;}
         else if (pos == len) {word[pos++] = '*';}
