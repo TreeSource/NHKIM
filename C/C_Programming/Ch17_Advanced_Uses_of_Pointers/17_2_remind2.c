@@ -15,7 +15,7 @@ int main(void)
 
     for (;;)
     {
-        if (num_remind == MAX_REMIND) {printf("--NO SPACE LEFT --\N"); break;}
+        if (num_remind == MAX_REMIND) {printf("--NO SPACE LEFT --\n"); break;}
 
         printf("Enter day and reminder: ");
         scanf("%2d", &day);

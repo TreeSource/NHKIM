@@ -2,13 +2,14 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "readline.h"
 
 #define NAME_LEN 25
 
 struct part
 {
-    int number, on_hand; char name[NAME_LEN + 1]; struct part *next
+    int number, on_hand; char name[NAME_LEN + 1]; struct part *next;
 };
 
 struct part *inventory = NULL; /* points to first part */
@@ -18,6 +19,7 @@ void insert(void);
 void search(void);
 void update(void);
 void print(void);
+int compare_parts(const void *p, const void *q);
 
 /*
 main: Prompts the user to enter an operation code, then calls a
@@ -141,4 +143,14 @@ void print(void)
     printf("Part Number Part Name               " "Quantity on Hand\n");
     for (p = inventory; p != NULL; p = p->next) printf("%7d         %-25s%11d\n", p->number, p->name, p->on_hand);
     
+}
+
+int compare_parts(const void *p, const void *q)
+{
+    return ((const struct part *) q)->number - ((const struct part *) p)->number;
+}
+
+int compare_parts_name(const void *p, const void *q)
+{
+    return strcmp(((const struct part *)p)->name, ((const struct part *)q)->name);
 }
